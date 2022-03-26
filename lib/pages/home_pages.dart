@@ -150,4 +150,34 @@ class _HomeState extends State<Home> {
     } else
       return Image.asset('assets/images/load.png');
   }
+
+  RichText selectText() {
+    if (_prediction == null)
+      return RichText(
+        text: TextSpan(
+          text: 'You can monitoring air quality by uploading imgae in your',
+          style: textStylePrimary,
+          children: [
+            TextSpan(text: 'gallery', style: textStyleSecondary),
+            TextSpan(text: 'or from your', style: textStylePrimary),
+            TextSpan(text: 'camera', style: textStyleSecondary),
+            TextSpan(text: 'gallery', style: textStylePrimary),
+          ],
+        ),
+        textAlign: TextAlign.center,
+      );
+    else
+      return RichText(
+        text: TextSpan(
+          text: 'you level air quality is a',
+          style: textStylePrimary,
+          children: [
+            TextSpan(text: _label, style: textStylePrimary),
+            TextSpan(
+                text: ' of course with accuracy of', style: textStylePrimary),
+            TextSpan(text: '$_confidence%', style: textStyleSecondary),
+          ],
+        ),
+      );
+  }
 }
