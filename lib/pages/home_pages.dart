@@ -134,4 +134,20 @@ class _HomeState extends State<Home> {
     label = label.toLowerCase();
     return label;
   }
+
+  String convert(value) {
+    double confidence = value * 100;
+    return confidence.toStringAsFixed(2);
+  }
+
+  Image selectImage() {
+    if (!_loading) {
+      if (_label == 'goodair') return Image.asset('assets/images/good.png');
+      if (_label == 'badquality')
+        return Image.asset('assets/images/cat.png');
+      else
+        return Image.asset('assets/images/upload.png');
+    } else
+      return Image.asset('assets/images/load.png');
+  }
 }
