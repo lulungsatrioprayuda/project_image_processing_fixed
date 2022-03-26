@@ -1,4 +1,3 @@
-import 'dart:ffi';
 import 'dart:io';
 import 'dart:ui';
 import 'package:project_image_processing_fixed/colors.dart';
@@ -20,8 +19,11 @@ class ViewImage extends StatelessWidget {
             top: 30,
             left: 10,
             child: IconButton(
-              icon: Icon(Icons.arrow_back_ios_new_rounded,
-                  color: ThemeColor.PRIMARY, size: 36),
+              icon: Icon(
+                Icons.arrow_back_rounded,
+                color: ThemeColor.PRIMARY,
+                size: 36,
+              ),
               onPressed: () {
                 Navigator.of(context).pop();
               },
@@ -33,9 +35,7 @@ class ViewImage extends StatelessWidget {
               padding: EdgeInsets.all(50),
               height: MediaQuery.of(context).size.height * 0.85,
               child: ClipRRect(
-                child: Image.file(
-                  File(image.path),
-                ),
+                child: Image.file(File(image.path)),
               ),
             ),
           )

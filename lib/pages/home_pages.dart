@@ -9,7 +9,7 @@ import 'package:google_fonts/google_fonts.dart';
 
 class Home extends StatefulWidget {
   @override
-  State<Home> createState() => _HomeState();
+  _HomeState createState() => _HomeState();
 }
 
 class _HomeState extends State<Home> {
@@ -22,7 +22,6 @@ class _HomeState extends State<Home> {
   TextStyle textStylePrimary = GoogleFonts.openSans(
     textStyle: TextStyle(color: ThemeColor.SECONDARY_LIGHT, fontSize: 18.0),
   );
-
   TextStyle textStyleSecondary = GoogleFonts.openSans(
     textStyle: TextStyle(
         fontWeight: FontWeight.bold,
@@ -46,12 +45,7 @@ class _HomeState extends State<Home> {
     return Scaffold(
       backgroundColor: ThemeColor.PRIMARY_DARK,
       body: Container(
-        padding: EdgeInsets.only(
-          top: 150,
-          left: 50,
-          right: 50,
-          bottom: 10,
-        ),
+        padding: EdgeInsets.only(top: 150, left: 50, right: 50, bottom: 10),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.center,
@@ -64,9 +58,9 @@ class _HomeState extends State<Home> {
             ),
             SizedBox(height: 50),
             selectText(),
-            SizedBox(height: 50),
+            SizedBox(height: 30),
             displayIcons(),
-            SizedBox(height: 50),
+            SizedBox(height: 30),
             viewImage(),
           ],
         ),
@@ -85,7 +79,7 @@ class _HomeState extends State<Home> {
     var imagePicker =
         await ImagePicker().pickImage(source: ImageSource.gallery);
 
-    if (ImagePicker == null) return null;
+    if (imagePicker == null) return null;
 
     setState(() {
       _loading = true;
@@ -99,14 +93,12 @@ class _HomeState extends State<Home> {
   pickImageFromCamera() async {
     var imagePicker = await ImagePicker().pickImage(source: ImageSource.camera);
 
-    if (ImagePicker == null) return null;
+    if (imagePicker == null) return null;
 
     setState(() {
       _loading = true;
       _imagePath = imagePicker;
-      _image = Image.file(
-        File(imagePicker.path),
-      );
+      _image = Image.file(File(imagePicker.path));
     });
 
     predict(imagePicker);
@@ -144,7 +136,7 @@ class _HomeState extends State<Home> {
     if (!_loading) {
       if (_label == 'goodair') return Image.asset('assets/images/good.png');
       if (_label == 'badquality')
-        return Image.asset('assets/images/cat.png');
+        return Image.asset('assets/images/bad.png');
       else
         return Image.asset('assets/images/upload.png');
     } else
@@ -155,13 +147,13 @@ class _HomeState extends State<Home> {
     if (_prediction == null)
       return RichText(
         text: TextSpan(
-          text: 'You can monitoring air quality by uploading imgae in your',
+          text: 'You can monitoring Air quality by upload image in your',
           style: textStylePrimary,
           children: [
-            TextSpan(text: 'gallery', style: textStyleSecondary),
-            TextSpan(text: 'or from your', style: textStylePrimary),
-            TextSpan(text: 'camera', style: textStyleSecondary),
-            TextSpan(text: 'gallery', style: textStylePrimary),
+            TextSpan(text: 'gallery ', style: textStyleSecondary),
+            TextSpan(text: 'or from your ', style: textStylePrimary),
+            TextSpan(text: 'camera ', style: textStyleSecondary),
+            TextSpan(text: 'to get started!', style: textStylePrimary),
           ],
         ),
         textAlign: TextAlign.center,
@@ -169,12 +161,13 @@ class _HomeState extends State<Home> {
     else
       return RichText(
         text: TextSpan(
-          text: 'you level air quality is a',
+          text: 'Your air quality is a ',
           style: textStylePrimary,
           children: [
-            TextSpan(text: _label, style: textStylePrimary),
+            TextSpan(text: _label, style: textStyleSecondary),
             TextSpan(
-                text: ' of course with accuracy of ', style: textStylePrimary),
+                text: ' with an accuracy image processing of ',
+                style: textStylePrimary),
             TextSpan(text: '$_confidence%', style: textStyleSecondary),
           ],
         ),
@@ -187,11 +180,11 @@ class _HomeState extends State<Home> {
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         IconButton(
-          color: ThemeColor.SECONDARY,
-          splashColor: ThemeColor.PRIMARY,
+          color: ThemeColor.PRIMARY,
+          splashColor: ThemeColor.SECONDARY,
           splashRadius: 40,
           iconSize: 36,
-          icon: Icon(Icons.create_new_folder_outlined),
+          icon: Icon(Icons.drive_folder_upload),
           onPressed: pickImage,
         ),
         SizedBox(
@@ -202,7 +195,7 @@ class _HomeState extends State<Home> {
           splashColor: ThemeColor.SECONDARY,
           splashRadius: 40,
           iconSize: 36,
-          icon: Icon(Icons.camera_alt_rounded),
+          icon: Icon(Icons.camera_alt_outlined),
           onPressed: pickImageFromCamera,
         ),
       ],
