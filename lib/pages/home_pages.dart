@@ -174,10 +174,11 @@ class _HomeState extends State<Home> {
           children: [
             TextSpan(text: _label, style: textStylePrimary),
             TextSpan(
-                text: ' of course with accuracy of', style: textStylePrimary),
+                text: ' of course with accuracy of ', style: textStylePrimary),
             TextSpan(text: '$_confidence%', style: textStyleSecondary),
           ],
         ),
+        textAlign: TextAlign.center,
       );
   }
 }
