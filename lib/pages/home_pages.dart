@@ -181,4 +181,18 @@ class _HomeState extends State<Home> {
         textAlign: TextAlign.center,
       );
   }
+
+  Row displayIcons() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        IconButton(
+          color: ThemeColor.SECONDARY,
+          splashColor: ThemeColor.PRIMARY,
+          splashRadius: 40,
+          iconSize: 36,
+        ),
+      ],
+    );
+  }
 }
