@@ -100,5 +100,38 @@ class _HomeState extends State<Home> {
     var imagePicker = await ImagePicker().pickImage(source: ImageSource.camera);
 
     if (ImagePicker == null) return null;
+
+    setState(() {
+      _loading = true;
+      _imagePath = imagePicker;
+      _image = Image.file(
+        File(imagePicker.path),
+      );
+    });
+
+    predict(imagePicker);
+  }
+
+  predict(XFile image) async {
+    var prediction = await Tflite.runModelOnImage(
+      path: image.path,
+      numResults: 2,
+      imageMean: 127.5,
+      imageStd: 127.5,
+      threshold: 0.5,
+    );
+
+    setState(() {
+      _loading = false;
+      _prediction = prediction;
+      _label = transform(_prediction[0]['label']);
+      _confidence = convert(_prediction[0]['confidence']);
+    });
+  }
+
+  String transform(str) {
+    String label = str.replaceAll(RegExp(r'[0-9 | s]'), '');
+    label = label.toLowerCase();
+    return label;
   }
 }
