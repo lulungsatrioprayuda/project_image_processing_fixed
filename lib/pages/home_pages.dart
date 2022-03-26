@@ -191,8 +191,56 @@ class _HomeState extends State<Home> {
           splashColor: ThemeColor.PRIMARY,
           splashRadius: 40,
           iconSize: 36,
+          icon: Icon(Icons.create_new_folder_outlined),
+          onPressed: pickImage,
+        ),
+        SizedBox(
+          width: 25,
+        ),
+        IconButton(
+          color: ThemeColor.PRIMARY,
+          splashColor: ThemeColor.SECONDARY,
+          splashRadius: 40,
+          iconSize: 36,
+          icon: Icon(Icons.camera_alt_rounded),
+          onPressed: pickImageFromCamera,
         ),
       ],
     );
+  }
+
+  viewImage() {
+    if (_image == null)
+      return Container();
+    else
+      return Container(
+        width: MediaQuery.of(context).size.width * 0.6,
+        child: ElevatedButton(
+          onPressed: () {
+            Navigator.push(context,
+                MaterialPageRoute(builder: (context) => ViewImage(_imagePath)));
+          },
+          style: ElevatedButton.styleFrom(
+            primary: ThemeColor.PRIMARY,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(25),
+            ),
+            elevation: 0.0,
+          ),
+          child: Padding(
+            padding: EdgeInsets.symmetric(vertical: 12, horizontal: 6),
+            child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    'View Image',
+                    style: GoogleFonts.openSans(
+                        fontSize: 18, fontWeight: FontWeight.w600),
+                  ),
+                  Icon(Icons.arrow_forward_rounded)
+                ]),
+          ),
+        ),
+      );
   }
 }
