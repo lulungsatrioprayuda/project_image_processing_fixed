@@ -7,6 +7,8 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:google_fonts/google_fonts.dart';
 
+import 'package:pie_chart/pie_chart.dart';
+
 class Home extends StatefulWidget {
   @override
   _HomeState createState() => _HomeState();
@@ -28,10 +30,43 @@ class _HomeState extends State<Home> {
         color: ThemeColor.SECONDARY,
         fontSize: 18.0),
   );
+// 2. make function like this
+  void updateMap() {
+    print(_prediction);
+    setState(() {
+      _loading = true; // still sir
+      // pick a image now
+      _label = _prediction != null ? transform(_prediction[0]['label']) : '';
+      print("Label: $_label");
+      // and load the data map in here and my app is gonna be running
+      // return dataMap = {
+      //   "good air": select_result_pluss() ?? 0,
+      //   "bad air": select_result_minus() ?? 0,
+      // };
+      // close statement
+      if (_label == 'goodair') {
+        return dataMap = {
+          "good air": getResult() ?? 0,
+          "bad air": 100 - (getResult() ?? 100),
+        };
+      } else if (_label == 'badquality') {
+        return dataMap = {
+          "good air": 100 - (getResult() ?? 100),
+          "bad air": getResult() ?? 0,
+        };
+      } else {
+        return dataMap = {
+          "good air": 0,
+          "bad air": 0,
+        };
+      }
+    });
+  }
 
   @override
   void initState() {
     super.initState();
+    updateMap();
     _loading = true;
     load().then((value) {
       setState(() {
@@ -39,6 +74,18 @@ class _HomeState extends State<Home> {
       });
     });
   }
+
+  // first making a map empty like this
+  Map<String, double> dataMap = {};
+
+  final legendLabels = <String, String>{
+    "Good Air": "Good Air",
+    "Bad Air": "Bad Air",
+  };
+  final colorList = <Color>[
+    Color(0xFF4DBB53),
+    Color(0xFFFF4848),
+  ];
 
   @override
   Widget build(BuildContext context) {
@@ -53,7 +100,17 @@ class _HomeState extends State<Home> {
             Center(
               child: Container(
                 height: 300.0,
-                child: selectImage(),
+                child: PieChart(
+                  dataMap: dataMap,
+                  chartType: ChartType.ring,
+                  baseChartColor: Colors.grey[50].withOpacity(0.15),
+                  colorList: colorList,
+                  chartValuesOptions: ChartValuesOptions(
+                    showChartValuesInPercentage: true,
+                  ),
+                  totalValue: 100,
+                ),
+                //selectImage(),
               ),
             ),
             SizedBox(height: 50),
@@ -112,12 +169,13 @@ class _HomeState extends State<Home> {
       imageStd: 127.5,
       threshold: 0.5,
     );
-
     setState(() {
       _loading = false;
       _prediction = prediction;
       _label = transform(_prediction[0]['label']);
       _confidence = convert(_prediction[0]['confidence']);
+      // _lola = _confidence;
+      updateMap();
     });
   }
 
@@ -132,16 +190,34 @@ class _HomeState extends State<Home> {
     return confidence.toStringAsFixed(2);
   }
 
-  Image selectImage() {
-    if (!_loading) {
-      if (_label == 'goodair') return Image.asset('assets/images/good.png');
-      if (_label == 'badquality')
-        return Image.asset('assets/images/bad.png');
-      else
-        return Image.asset('assets/images/upload.png');
-    } else
-      return Image.asset('assets/images/load.png');
+  // Image selectImage() {
+  //   if (!_loading) {
+  //     if (_label == 'goodair') return Image.asset('assets/images/good.png');
+  //     if (_label == 'badquality')
+  //       return Image.asset('assets/images/bad.png');
+  //     else
+  //       return Image.asset('assets/images/upload.png');
+  //   } else
+  //     return Image.asset('assets/images/load.png');
+  // }
+
+  double conv(value) {
+    double convi = value * 100;
+    return convi;
   }
+
+  double getResult() {
+    if (_prediction == null) return null;
+    var result_plus = conv(_prediction[0]['confidence']);
+    return result_plus;
+  }
+
+  // double select_result_minus() {
+  //   if (_prediction == null) return null;
+  //   var result = conv(_prediction[0]['confidence']);
+  //   var result_minus = 100 - result;
+  //   return result_minus;
+  // }
 
   RichText selectText() {
     if (_prediction == null)
